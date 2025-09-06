@@ -92,17 +92,11 @@ bool Adafruit_AM2320::begin() {
 */
 /**************************************************************************/
 float Adafruit_AM2320::readTemperature() {
-  uint32_t data = readRegister32(AM2320_REG_HUM_H);
+  uint32_t data = readRegister32(AM2320_REG_TEMP_H);
   if (data == 0xFFFFFFFF)
     return NAN;
-  float ft;
-  // check sign bit - the temperature MSB is signed , bit 0-15 are magnitude
-  if (data & 0x8000) {
-    ft = -(int16_t)(data & 0x7FFF);
-  } else {
-    ft = (int16_t)(data & 0xFFFF);
-  }
-  return ft / 10.0;
+
+  return (data >> 16) / 10.0;
 }
 
 /**************************************************************************/
